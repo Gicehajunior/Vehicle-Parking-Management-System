@@ -15,7 +15,7 @@ Web management system using Procedural programming in php(back-end) &amp; javasc
             4. Open PHPMyAdmin (http://localhost/phpmyadmin)
             5. Create a database with name vpmsdb
             6. Import vpmsdb.sql file(given inside the zip package in  sql file folder)
-            7.Run the script http://localhost/vpms (frontend)
+            7.Run the script http://localhost/vehicle_parking (frontend)
 
             Username: admin
             Password: Test @123
