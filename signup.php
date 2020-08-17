@@ -3,19 +3,29 @@ session_start();
 error_reporting(0);
 include('includes/dbconnection.php');
 
-if(isset($_POST['login']))
+if(isset($_POST['signup']))
 {
     $adminuser=$_POST['username'];
+    $email=$_POST['email'];
+    $tel=$_POST['tel'];
     $password=md5($_POST['password']);
-    $query=mysqli_query($con,"select ID from tbladmin where  UserName='$adminuser' && Password='$password' ");
-    $ret=mysqli_fetch_array($query);
-    if($ret>0){
-        $_SESSION['vpmsaid']=$ret['ID'];
-        header('location:dashboard.php');
+    $passwordConfirm=md5($_POST['password-confirm']);
+    $AdminRegdate = date('Y-m-d h:i:s');
+    if($password !== $passwordConfirm){
+        echo "<script>alert('Password mismatch. Please try again.');</script>";
     }
     else{
-    $msg="Invalid Details.";
+        $query=mysqli_query($con, "insert into  tbladmin(AdminName, UserName, MobileNumber, Email, Password, AdminRegdate) value('Admin', '$adminuser', '$tel', '$email', '$password', '$AdminRegdate')");
+    
+        if($query){
+            echo "<script>alert('Signup Successfull');</script>";
+            echo "<script>window.location.href ='index.php'</script>";
+        }
+        else{
+            echo "<script>alert('Something Went Wrong with signing up. Please try again.');</script>";
+        }
     }
+    
 }
 ?>
 <!doctype html>
@@ -48,34 +58,37 @@ if(isset($_POST['login']))
             <div class="login-content">
                 <div class="login-logo">
                     <a href="index.php">
-                        <h2 style="color: #fff">Vehicle Parking Management System</h2> 
+                        <h2 style="color: #fff">Vehicle Parking Management System</h2>
                     </a>
                 </div>
                 <div class="login-form">
-                    <h2 class="text-center">Sign in</h2>
-                    <form method="post">
-                         <p style="font-size:16px; color:red" align="center"> <?php if($msg){
-                                echo $msg;
-                            }  ?> </p>
+                    <h2 class="text-center">Sign Up</h2>
+                    <form method="post">  
                         <div class="form-group">
                             <label>User Name</label>
                             <input class="form-control" type="text" placeholder="Username" required="true" name="username">
                         </div>
                         <div class="form-group">
+                            <label>Email</label>
+                            <input class="form-control" type="text" placeholder="Email" required="true" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label>Contact</label>
+                            <input class="form-control" type="tel" maxlength="12" placeholder="Telephone Number" required="true" name="tel">
+                        </div>
+                        <div class="form-group">
                             <label>Password</label>
                             <input type="password" class="form-control" name="password" placeholder="Password" required="true">
                         </div>
-                        <div class="checkbox">
-                            
-                            <label class="pull-right">
-                                <a href="forgot-password.php">Forgotten Password?</a>
-                            </label>
-
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" class="form-control" name="password-confirm" placeholder="Re-enter Password" required="true">
                         </div>
-                        <button type="submit" name="login" class="btn btn-success btn-flat m-b-30 m-t-30">Sign in</button> 
+                        
+                        <button type="submit" name="signup" class="btn btn-success btn-flat m-b-30 m-t-30">Signup</button> 
                     </form>
                     <div class="form-group pt-3">
-                        Signup <a href="signup.php">here</a>
+                        Sign in <a href="index.php">here</a>
                     </div>
                 </div>
             </div>
@@ -87,6 +100,13 @@ if(isset($_POST['login']))
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
     <script src="assets/js/main.js"></script>
-
 </body>
 </html>
+
+
+
+
+
+
+
+
